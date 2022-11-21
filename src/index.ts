@@ -40,8 +40,8 @@ app.use((req, res, next) => {
 
 app.post("/", cors(), (req, res) => {
 
-    console.log(req.body, "body")
-    res.send({ message: "Hello world!", body: req.body });
+    console.log(req, "body")
+    res.send({ message: "Hello world!", body: JSON.stringify(req) });
 });
 
 app.get("/", cors(), (req, res) => {
