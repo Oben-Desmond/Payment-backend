@@ -43,6 +43,12 @@ app.post("/", cors(), (req, res) => {
     res.send({ message: "Hello world!", body: req.body });
 });
 
+app.get("/", cors(), (req, res) => {
+
+
+    res.send("WELCOME TO PAYMENTS");
+});
+
 // start the Express server
 app.listen(port, () => {
 
