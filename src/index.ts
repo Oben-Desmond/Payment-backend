@@ -39,7 +39,7 @@ app.use((req, res, next) => {
 
 app.post("/", cors(), (req, res) => {
 
-
+    console.log(req.body, "body")
     res.send({ message: "Hello world!", body: req.body });
 });
 
