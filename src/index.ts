@@ -6,7 +6,7 @@ import bodyParser from "body-parser";
 
 
 const app = express();
-const port = 8080; // default port to listen
+const port = process.env.PORT || 8080; // default port to listen
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json())
