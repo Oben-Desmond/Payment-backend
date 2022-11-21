@@ -9,7 +9,7 @@ const app = express();
 const port = process.env.PORT || 8080; // default port to listen
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.json({ type: '*/*' }));
+// app.use(express.json({ type: '*/*' }));
 app.use(bodyParser.json())
 
 app.use((req, res, next) => {
@@ -41,7 +41,7 @@ app.use((req, res, next) => {
 app.post("/", cors(), (req, res) => {
 
     console.log(req, "body")
-    res.send({ message: "Hello world!", body: JSON.stringify(req) });
+    res.send({ message: "Hello world!", body: (req.body) });
 });
 
 app.get("/", cors(), (req, res) => {
