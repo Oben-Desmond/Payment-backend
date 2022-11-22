@@ -3,6 +3,7 @@
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
+import { implementKCPayment } from "./api/firebase/kcpayment.api";
 
 
 const app = express();
@@ -38,10 +39,11 @@ app.use((req, res, next) => {
 
 // define a route handler for the default home page
 
-app.post("/", cors(), (req, res) => {
+app.post("/kc/payment", cors(), async (req, res) => {
 
-    console.log(req, "body")
-    res.send({ message: "Hello world!", body: (req.body) });
+    await implementKCPayment(res)
+    // console.log({ message: "Successfuly registered prospects ", body: (req.body) })
+    res.send({ message: "Successfuly registered prospects ", body: (req.body) });
 });
 
 app.get("/", cors(), (req, res) => {
