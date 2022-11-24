@@ -50,9 +50,11 @@ app.post("/kc/payment", cors(), async (req, res) => {
 app.post("/ta/verify", cors(), async (req, res) => {
 
     const result = await verifyZitoPaymentSuccess(req.body.id)
-    // console.log({ message: "Successfuly registered prospects ", body: (req.body) })
+    validateTransactions()
     if (result) res.send({ message: "verification successful", status: 1 });
     else res.send({ message: "verification failed", status: -1 });
+
+
 });
 
 app.post("/ta/payment", cors(), async (req, res) => {

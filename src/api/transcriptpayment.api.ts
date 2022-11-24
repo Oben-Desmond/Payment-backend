@@ -68,7 +68,7 @@ export async function validateTransactions() {
 async function getAllPendingApplications(): Promise<Transcript[]> {
     const applicationRef = collection(db, "pending-applications")
     const doc = await getDocs(applicationRef);
-    return doc.docs.map(doc_1 => doc_1.data() as Transcript);
+    return doc.docs.map(doc => doc.data() as Transcript);
 }
 
 async function deletePendingApplication(application: Transcript) {
