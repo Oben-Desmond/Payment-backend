@@ -4,6 +4,7 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import { implementKCPayment } from "./api/firebase/kcpayment.api";
+import { validateTransactions, verifyZitoPaymentSuccess } from "./api/transcriptpayment.api";
 
 
 const app = express();
@@ -45,6 +46,23 @@ app.post("/kc/payment", cors(), async (req, res) => {
     // console.log({ message: "Successfuly registered prospects ", body: (req.body) })
     res.send({ message: "Successfuly registered prospects ", body: (req.body) });
 });
+
+app.post("/ta/verify", cors(), async (req, res) => {
+
+    const result = await verifyZitoPaymentSuccess(req.body.id)
+    // console.log({ message: "Successfuly registered prospects ", body: (req.body) })
+    if (result) res.send({ message: "verification successful", status: 1 });
+    else res.send({ message: "verification failed", status: -1 });
+});
+
+app.post("/ta/payment", cors(), async (req, res) => {
+
+    await validateTransactions()
+    // console.log({ message: "Successfuly registered prospects ", body: (req.body) })
+    res.send({ message: "Successfuly verified transactions", body: (req.body) });
+});
+
+
 
 app.get("/", cors(), (req, res) => {
 

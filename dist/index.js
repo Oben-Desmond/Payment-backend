@@ -16,6 +16,7 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const kcpayment_api_1 = require("./api/firebase/kcpayment.api");
+const transcriptpayment_api_1 = require("./api/transcriptpayment.api");
 const app = (0, express_1.default)();
 const port = process.env.PORT || 8080; // default port to listen
 app.use(body_parser_1.default.urlencoded({ extended: false }));
@@ -39,8 +40,16 @@ app.use((req, res, next) => {
 // define a route handler for the default home page
 app.post("/kc/payment", (0, cors_1.default)(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, kcpayment_api_1.implementKCPayment)(res);
-    console.log({ message: "Successfuly registered prospects ", body: (req.body) });
+    // console.log({ message: "Successfuly registered prospects ", body: (req.body) })
     res.send({ message: "Successfuly registered prospects ", body: (req.body) });
+}));
+app.post("/ta/verify", (0, cors_1.default)(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield (0, transcriptpayment_api_1.verifyZitoPaymentSuccess)(req.body.id);
+    // console.log({ message: "Successfuly registered prospects ", body: (req.body) })
+    if (result)
+        res.send({ message: "verification successful", status: 1 });
+    else
+        res.send({ message: "verification failed", status: -1 });
 }));
 app.get("/", (0, cors_1.default)(), (req, res) => {
     res.send("WELCOME TO PAYMENTS");

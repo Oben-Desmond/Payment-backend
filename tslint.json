@@ -11,7 +11,8 @@
         "no-console": false,
         "only-arrow-functions": false,
         "no-shadowed-variable": false,
-        "app/no-options": false
+        "app/no-options": false,
+        "triple-equals": false
     },
     "rulesDirectory": []
 }
