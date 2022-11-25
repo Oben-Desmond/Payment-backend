@@ -51,6 +51,11 @@ app.post("/ta/verify", (0, cors_1.default)(), (req, res) => __awaiter(void 0, vo
     else
         res.send({ message: "verification failed", status: -1 });
 }));
+app.post("/ta/payment", (0, cors_1.default)(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, transcriptpayment_api_1.validateTransactions)();
+    // console.log({ message: "Successfuly registered prospects ", body: (req.body) })
+    res.send({ message: "Successfuly verified transactions", body: (req.body) });
+}));
 app.get("/", (0, cors_1.default)(), (req, res) => {
     res.send("WELCOME TO PAYMENTS");
 });

@@ -12,7 +12,8 @@
         "only-arrow-functions": false,
         "no-shadowed-variable": false,
         "app/no-options": false,
-        "triple-equals": false
+        "triple-equals": false,
+        "prefer-for-of": false
     },
     "rulesDirectory": []
 }

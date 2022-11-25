@@ -30,7 +30,7 @@ export async function verifyZitoPaymentSuccess(transcriptID: string) {
     console.log(url)
     const result = (await axios.get(url, {
         headers: { "Accept": "application/json" },
-    })) as ZitoPayTransactionExistResponse;
+    })).data as ZitoPayTransactionExistResponse;
     console.log(result)
     if (result.status == 1) {
         return true;
@@ -54,26 +54,31 @@ export function createApplication(transcript: Transcript) {
 
 export async function validateTransactions() {
     const allApplications = await getAllPendingApplications()
-    allApplications.map(async (application, index) => {
-        await delay()
+    for (let i = 0; i < allApplications.length; i++) {
+        const application = allApplications[i]
+        await delay(2000)
         try {
             const result = await verifyZitoPaymentSuccess(application.id)
             if (result) {
                 await createApplication(application)
                 await deletePendingApplication(application)
             }
+            if (((Date.now() - application.timestamp) / (1000 * 60 * 60)) > 5) {
+                console.log("expired")
+                await deletePendingApplication(application)
+            }
         } catch (err) {
             console.log(err)
         }
 
-    })
+    }
 }
 
 
 async function getAllPendingApplications(): Promise<Transcript[]> {
     const applicationRef = collection(db, "pending-applications")
     const doc = await getDocs(applicationRef);
-    return doc.docs.map(doc_1 => doc_1.data() as Transcript);
+    return doc.docs.map(doc => doc.data() as Transcript);
 }
 
 async function deletePendingApplication(application: Transcript) {
