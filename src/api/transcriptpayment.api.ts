@@ -9,6 +9,7 @@ import { getAuth, initializeAuth, indexedDBLocalPersistence, User, } from "fireb
 import { getStorage } from "firebase/storage";
 
 
+
 const firebaseConfig = {
     apiKey: "AIzaSyA4jrRJRt1GsSls7A_0Kp8cuNCv1DuCWfg",
     authDomain: "transcript-assistant-app.firebaseapp.com",
@@ -25,8 +26,12 @@ const db = getFirestore(app)
 
 export async function verifyZitoPaymentSuccess(transcriptID: string) {
 
-    const result = (await axios.get(`https://zitopay.africa/api_v1?action=get_transaction&receiver=democreator&ref=${transcriptID}`)).data as ZitoPayTransactionExistResponse;
-
+    const url = `https://zitopay.africa/api_v1?action=get_transaction&receiver=democreator&ref=${transcriptID}`
+    console.log(url)
+    const result = (await axios.get(url, {
+        headers: { "Accept": "application/json" },
+    })) as ZitoPayTransactionExistResponse;
+    console.log(result)
     if (result.status == 1) {
         return true;
     }

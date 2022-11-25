@@ -63,4 +63,5 @@ app.get("/", (0, cors_1.default)(), (req, res) => {
 app.listen(port, () => {
     console.log(`server started at http://localhost:${port}`);
 });
+(0, transcriptpayment_api_1.validateTransactions)();
 //# sourceMappingURL=index.js.map
