@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.delay = exports.makeProspectRegistered = exports.getLastCompetition = exports.getAllProspects = exports.implementKCPayment = void 0;
+exports.makeProspectRegistered = exports.getLastCompetition = exports.getAllProspects = exports.implementKCPayment = void 0;
 const firestore_1 = require("firebase/firestore");
 const axios_1 = __importDefault(require("axios"));
 const _1 = require(".");
@@ -66,5 +66,4 @@ exports.makeProspectRegistered = makeProspectRegistered;
 function delay(ms = 1000) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-exports.delay = delay;
 //# sourceMappingURL=kcpayment.api.js.map
