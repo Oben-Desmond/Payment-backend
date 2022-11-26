@@ -8,7 +8,7 @@ export async function implementKCPayment(res: any) {
     const prospects = await getAllProspects(competition.name)
     try {
         prospects.map(async (prospect: KCCompetitionApplication) => {
-            const result = (await axios.get(`https://zitopay.africa/api_v1?action=get_transaction&receiver=democreator&ref=${prospect.student.email}`)).data as ZitoPayTransactionExistResponse;
+            const result = (await axios.get(`https://zitopay.africa/api_v1?action=get_transaction&receiver=obendesmond&ref=${prospect.student.email}`)).data as ZitoPayTransactionExistResponse;
             await delay()
             console.log(prospect, result.status);
             if (result.status === 1) {
