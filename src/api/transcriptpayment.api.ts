@@ -26,7 +26,7 @@ const db = getFirestore(app)
 
 export async function verifyZitoPaymentSuccess(transcriptID: string) {
 
-    const url = `https://zitopay.africa/api_v1?action=get_transaction&receiver=democreator&ref=${transcriptID}`
+    const url = `https://zitopay.africa/api_v1?action=get_transaction&receiver=obendesmond&ref=${transcriptID}`
     console.log(url)
     const result = (await axios.get(url, {
         headers: { "Accept": "application/json" },
