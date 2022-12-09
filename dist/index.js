@@ -43,6 +43,39 @@ app.post("/kc/payment", (0, cors_1.default)(), (req, res) => __awaiter(void 0, v
     // console.log({ message: "Successfuly registered prospects ", body: (req.body) })
     res.send({ message: "Successfuly registered prospects ", body: (req.body) });
 }));
+app.get("/kc/payment", (0, cors_1.default)(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield (0, kcpayment_api_1.implementKCPayment)(res);
+    }
+    catch (err) {
+        res.send({ message: (err === null || err === void 0 ? void 0 : err.message) || JSON.stringify(err) });
+        console.log(err);
+    }
+    // console.log({ message: "Successfuly registered prospects ", body: (req.body) })
+    res.send({ message: "Successfuly registered prospects ", body: (req.body) });
+}));
+app.get("/kc/donations", (0, cors_1.default)(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield (0, kcpayment_api_1.verifyKCDonations)(res);
+    }
+    catch (err) {
+        res.send({ message: (err === null || err === void 0 ? void 0 : err.message) || JSON.stringify(err) });
+        console.log(err);
+    }
+    // console.log({ message: "Successfuly registered prospects ", body: (req.body) })
+    res.send({ message: "Successfuly registered donations ", body: (req.body) });
+}));
+app.post("/kc/donations", (0, cors_1.default)(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield (0, kcpayment_api_1.verifyKCDonations)(res);
+    }
+    catch (err) {
+        res.send({ message: (err === null || err === void 0 ? void 0 : err.message) || JSON.stringify(err) });
+        console.log(err);
+    }
+    // console.log({ message: "Successfuly registered prospects ", body: (req.body) })
+    res.send({ message: "Successfuly registered donations ", body: (req.body) });
+}));
 app.post("/ta/verify", (0, cors_1.default)(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield (0, transcriptpayment_api_1.verifyZitoPaymentSuccess)(req.body.id);
     // console.log({ message: "Successfuly registered prospects ", body: (req.body) })

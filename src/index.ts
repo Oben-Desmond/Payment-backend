@@ -3,7 +3,7 @@
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
-import { implementKCPayment } from "./api/firebase/kcpayment.api";
+import { implementKCPayment, verifyKCDonations } from "./api/firebase/kcpayment.api";
 import { validateTransactions, verifyZitoPaymentSuccess } from "./api/transcriptpayment.api";
 
 
@@ -35,17 +35,51 @@ app.use((req, res, next) => {
 
 
 
-// // Parse JSON bodies (as sent by API clients)
-// app.use(express.json());
-
-// define a route handler for the default home page
 
 app.post("/kc/payment", cors(), async (req, res) => {
-
-    await implementKCPayment(res)
-    // console.log({ message: "Successfuly registered prospects ", body: (req.body) })
+    try {
+        await implementKCPayment(res)
+    } catch (err: any) {
+        res.send({ message: err?.message || JSON.stringify(err) })
+    }
     res.send({ message: "Successfuly registered prospects ", body: (req.body) });
 });
+
+app.get("/kc/payment", cors(), async (req, res) => {
+
+    try {
+        await implementKCPayment(res)
+    } catch (err: any) {
+        res.send({ message: err?.message || JSON.stringify(err) })
+        console.log(err)
+    }
+    res.send({ message: "Successfuly registered prospects ", body: (req.body) });
+});
+app.get("/kc/donations", cors(), async (req, res) => {
+
+    try {
+        await verifyKCDonations(res)
+    } catch (err: any) {
+        res.send({ message: err?.message || JSON.stringify(err) })
+        console.log(err)
+    }
+    // console.log({ message: "Successfuly registered prospects ", body: (req.body) })
+    res.send({ message: "Successfuly registered donations ", body: (req.body) });
+});
+
+app.post("/kc/donations", cors(), async (req, res) => {
+    try {
+        await verifyKCDonations(res)
+    } catch (err: any) {
+        res.send({ message: err?.message || JSON.stringify(err) })
+        console.log(err)
+    }
+    // console.log({ message: "Successfuly registered prospects ", body: (req.body) })
+    res.send({ message: "Successfuly registered donations ", body: (req.body) });
+});
+
+
+
 
 app.post("/ta/verify", cors(), async (req, res) => {
 

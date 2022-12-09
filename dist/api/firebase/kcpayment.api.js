@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.delay = exports.makeProspectRegistered = exports.getLastCompetition = exports.getAllProspects = exports.implementKCPayment = void 0;
+exports.delay = exports.makeProspectRegistered = exports.getLastCompetition = exports.makeDonorPaid = exports.getAllDonations = exports.getAllProspects = exports.verifyKCDonations = exports.implementKCPayment = void 0;
 const firestore_1 = require("firebase/firestore");
 const axios_1 = __importDefault(require("axios"));
 const _1 = require(".");
@@ -21,15 +21,14 @@ function implementKCPayment(res) {
         const competition = yield getLastCompetition();
         const prospects = yield getAllProspects(competition.name);
         try {
-            prospects.map((prospect) => __awaiter(this, void 0, void 0, function* () {
-                const result = (yield axios_1.default.get(`https://zitopay.africa/api_v1?action=get_transaction&receiver=democreator&ref=${prospect.student.email}`)).data;
+            for (let i = 0; i < prospects.length; i++) {
+                const prospect = prospects[i];
+                const result = (yield axios_1.default.get(`https://zitopay.africa/api_v1?action=get_transaction&receiver=obendesmond&ref=${prospect.student.email}`)).data;
                 yield delay();
-                console.log(prospect, result.status);
                 if (result.status === 1) {
                     makeProspectRegistered(prospect, competition.name);
                 }
-                return result;
-            }));
+            }
         }
         catch (err) {
             res.send({ message: (err === null || err === void 0 ? void 0 : err.message) || JSON.stringify(err) });
@@ -37,6 +36,22 @@ function implementKCPayment(res) {
     });
 }
 exports.implementKCPayment = implementKCPayment;
+function verifyKCDonations(res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const donations = yield getAllDonations();
+        console.log(donations);
+        for (let i = 0; i < donations.length; i++) {
+            const donation = donations[i];
+            const result = (yield axios_1.default.get(`https://zitopay.africa/api_v1?action=get_transaction&receiver=obendesmond&ref=${donation.name}`)).data;
+            yield delay();
+            console.log(result);
+            if (result.status === 1) {
+                makeDonorPaid(donation);
+            }
+        }
+    });
+}
+exports.verifyKCDonations = verifyKCDonations;
 function getAllProspects(competitionId) {
     return __awaiter(this, void 0, void 0, function* () {
         const prospectRef = (0, firestore_1.collection)(_1.db, `competitions/${competitionId}/prospects`);
@@ -45,6 +60,22 @@ function getAllProspects(competitionId) {
     });
 }
 exports.getAllProspects = getAllProspects;
+function getAllDonations() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const donationsRef = (0, firestore_1.collection)((0, firestore_1.getFirestore)(), 'donations');
+        return (0, firestore_1.getDocs)(donationsRef).then((res) => {
+            return [...res.docs.map(doc => doc.data())];
+        });
+    });
+}
+exports.getAllDonations = getAllDonations;
+function makeDonorPaid(donor) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const donationRef = (0, firestore_1.doc)((0, firestore_1.getFirestore)(), 'donations', donor.ref);
+        return (0, firestore_1.setDoc)(donationRef, Object.assign(Object.assign({}, donor), { paid: true }));
+    });
+}
+exports.makeDonorPaid = makeDonorPaid;
 function getLastCompetition() {
     return __awaiter(this, void 0, void 0, function* () {
         const competitionsref = (0, firestore_1.collection)(_1.db, 'competitions');

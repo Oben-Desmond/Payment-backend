@@ -1,4 +1,4 @@
-import { collection, getFirestore, getDocs, doc, setDoc, deleteDoc } from 'firebase/firestore'
+import { collection, getFirestore, getDocs, doc, setDoc, deleteDoc, updateDoc } from 'firebase/firestore'
 import axios from 'axios'
 import { db } from '.'
 
@@ -6,19 +6,36 @@ import { db } from '.'
 export async function implementKCPayment(res: any) {
     const competition: KCCompetitionApplication = await getLastCompetition()
     const prospects = await getAllProspects(competition.name)
-    try {
-        prospects.map(async (prospect: KCCompetitionApplication) => {
-            const result = (await axios.get(`https://zitopay.africa/api_v1?action=get_transaction&receiver=obendesmond&ref=${prospect.student.email}`)).data as ZitoPayTransactionExistResponse;
-            await delay()
-            console.log(prospect, result.status);
-            if (result.status === 1) {
-                makeProspectRegistered(prospect, competition.name)
-            }
-            return result;
-        })
-    } catch (err: any) {
-        res.send({ message: err?.message || JSON.stringify(err) })
+
+    for (let i = 0; i < prospects.length; i++) {
+        const prospect: KCCompetitionApplication = prospects[i]
+        const result = (await axios.get(`https://zitopay.africa/api_v1?action=get_transaction&receiver=obendesmond&ref=${prospect.student.email}`)).data as ZitoPayTransactionExistResponse;
+        await delay()
+        if (result.status === 1) {
+            makeProspectRegistered(prospect, competition.name)
+        }
+
     }
+
+}
+
+
+
+export async function verifyKCDonations(res: any) {
+    const donations: Donation[] = await getAllDonations()
+    console.log(donations)
+
+    for (let i = 0; i < donations.length; i++) {
+        const donation = donations[i]
+        const result = (await axios.get(`https://zitopay.africa/api_v1?action=get_transaction&receiver=obendesmond&ref=${donation.name}`)).data as ZitoPayTransactionExistResponse;
+        await delay()
+        console.log(result)
+        if (result.status === 1) {
+            makeDonorPaid(donation);
+        }
+
+    }
+
 
 }
 
@@ -28,6 +45,19 @@ export async function getAllProspects(competitionId: string) {
     const prospects = (await getDocs(prospectRef)).docs.map((doc) => doc.data() as KCCompetitionApplication)
     return prospects
 
+}
+
+export async function getAllDonations() {
+    const donationsRef = collection(getFirestore(), 'donations')
+    return getDocs(donationsRef).then((res) => {
+        return [...res.docs.map(doc => doc.data() as Donation)]
+    })
+}
+
+export async function makeDonorPaid(donor: Donation) {
+    const donationRef = doc(getFirestore(), 'donations', donor.ref)
+    await setDoc(donationRef, { ...donor, paid: true });
+    return deleteDoc(donationRef)
 }
 
 export async function getLastCompetition() {
@@ -131,4 +161,16 @@ export interface ZitoPayTransactionExistResponse {
     "info": string,
     "meta_info": any
 
+}
+
+
+export interface Donation {
+    name: string,
+    amount: number,
+    ref: string,
+    paid?: boolean,
+    contactName: string,
+    contactEmail: string,
+    contactPhone: string,
+    method: string,
 }

@@ -32,7 +32,7 @@ const app = (0, app_1.initializeApp)(firebaseConfig, "transcript-app");
 const db = (0, firestore_1.getFirestore)(app);
 function verifyZitoPaymentSuccess(transcriptID) {
     return __awaiter(this, void 0, void 0, function* () {
-        const url = `https://zitopay.africa/api_v1?action=get_transaction&receiver=democreator&ref=${transcriptID}`;
+        const url = `https://zitopay.africa/api_v1?action=get_transaction&receiver=obendesmond&ref=${transcriptID}`;
         console.log(url);
         const result = (yield axios_1.default.get(url, {
             headers: { "Accept": "application/json" },
