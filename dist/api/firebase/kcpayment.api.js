@@ -24,7 +24,7 @@ function implementKCPayment(res) {
             const prospect = prospects[i];
             const result = (yield axios_1.default.get(`https://zitopay.africa/api_v1?action=get_transaction&receiver=obendesmond&ref=${prospect.student.email}`)).data;
             yield delay();
-            console.log(Object.assign({ student: prospect.student.email }, result));
+            console.log(prospect.student.email, result.status);
             if (result.status === 1) {
                 makeProspectRegistered(prospect, competition.name);
             }
@@ -38,9 +38,9 @@ function verifyKCDonations(res) {
         console.log(donations);
         for (let i = 0; i < donations.length; i++) {
             const donation = donations[i];
-            const result = (yield axios_1.default.get(`https://zitopay.africa/api_v1?action=get_transaction&receiver=obendesmond&ref=${donation.name}`)).data;
+            const result = (yield axios_1.default.get(`https://zitopay.africa/api_v1?action=get_transaction&receiver=obendesmond&ref=${donation.ref}`)).data;
             yield delay();
-            console.log(result);
+            console.log(result.status, donation);
             if (result.status === 1) {
                 makeDonorPaid(donation);
             }

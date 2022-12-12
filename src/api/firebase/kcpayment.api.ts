@@ -24,13 +24,13 @@ export async function implementKCPayment(res: any) {
 
 export async function verifyKCDonations(res: any) {
     const donations: Donation[] = await getAllDonations()
-    console.log(donations)
+    // console.log(donations)
 
     for (let i = 0; i < donations.length; i++) {
         const donation = donations[i]
-        const result = (await axios.get(`https://zitopay.africa/api_v1?action=get_transaction&receiver=obendesmond&ref=${donation.name}`)).data as ZitoPayTransactionExistResponse;
+        const result = (await axios.get(`https://zitopay.africa/api_v1?action=get_transaction&receiver=obendesmond&ref=${donation.ref}`)).data as ZitoPayTransactionExistResponse;
         await delay()
-        console.log(result)
+        console.log(result.status, donation.ref, donation.contactEmail)
         if (result.status === 1) {
             makeDonorPaid(donation);
         }
