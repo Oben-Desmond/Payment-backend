@@ -20,18 +20,14 @@ function implementKCPayment(res) {
     return __awaiter(this, void 0, void 0, function* () {
         const competition = yield getLastCompetition();
         const prospects = yield getAllProspects(competition.name);
-        try {
-            for (let i = 0; i < prospects.length; i++) {
-                const prospect = prospects[i];
-                const result = (yield axios_1.default.get(`https://zitopay.africa/api_v1?action=get_transaction&receiver=obendesmond&ref=${prospect.student.email}`)).data;
-                yield delay();
-                if (result.status === 1) {
-                    makeProspectRegistered(prospect, competition.name);
-                }
+        for (let i = 0; i < prospects.length; i++) {
+            const prospect = prospects[i];
+            const result = (yield axios_1.default.get(`https://zitopay.africa/api_v1?action=get_transaction&receiver=obendesmond&ref=${prospect.student.email}`)).data;
+            yield delay();
+            console.log(Object.assign({ student: prospect.student.email }, result));
+            if (result.status === 1) {
+                makeProspectRegistered(prospect, competition.name);
             }
-        }
-        catch (err) {
-            res.send({ message: (err === null || err === void 0 ? void 0 : err.message) || JSON.stringify(err) });
         }
     });
 }
@@ -72,7 +68,8 @@ exports.getAllDonations = getAllDonations;
 function makeDonorPaid(donor) {
     return __awaiter(this, void 0, void 0, function* () {
         const donationRef = (0, firestore_1.doc)((0, firestore_1.getFirestore)(), 'donations', donor.ref);
-        return (0, firestore_1.setDoc)(donationRef, Object.assign(Object.assign({}, donor), { paid: true }));
+        yield (0, firestore_1.setDoc)(donationRef, Object.assign(Object.assign({}, donor), { paid: true }));
+        return (0, firestore_1.deleteDoc)(donationRef);
     });
 }
 exports.makeDonorPaid = makeDonorPaid;

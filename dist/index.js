@@ -35,12 +35,13 @@ app.use((req, res, next) => {
     // Pass to next layer of middleware
     next();
 });
-// // Parse JSON bodies (as sent by API clients)
-// app.use(express.json());
-// define a route handler for the default home page
 app.post("/kc/payment", (0, cors_1.default)(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield (0, kcpayment_api_1.implementKCPayment)(res);
-    // console.log({ message: "Successfuly registered prospects ", body: (req.body) })
+    try {
+        yield (0, kcpayment_api_1.implementKCPayment)(res);
+    }
+    catch (err) {
+        res.send({ message: (err === null || err === void 0 ? void 0 : err.message) || JSON.stringify(err) });
+    }
     res.send({ message: "Successfuly registered prospects ", body: (req.body) });
 }));
 app.get("/kc/payment", (0, cors_1.default)(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -51,7 +52,6 @@ app.get("/kc/payment", (0, cors_1.default)(), (req, res) => __awaiter(void 0, vo
         res.send({ message: (err === null || err === void 0 ? void 0 : err.message) || JSON.stringify(err) });
         console.log(err);
     }
-    // console.log({ message: "Successfuly registered prospects ", body: (req.body) })
     res.send({ message: "Successfuly registered prospects ", body: (req.body) });
 }));
 app.get("/kc/donations", (0, cors_1.default)(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {

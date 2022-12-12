@@ -11,6 +11,7 @@ export async function implementKCPayment(res: any) {
         const prospect: KCCompetitionApplication = prospects[i]
         const result = (await axios.get(`https://zitopay.africa/api_v1?action=get_transaction&receiver=obendesmond&ref=${prospect.student.email}`)).data as ZitoPayTransactionExistResponse;
         await delay()
+        console.log(prospect.student.email, result.status)
         if (result.status === 1) {
             makeProspectRegistered(prospect, competition.name)
         }
