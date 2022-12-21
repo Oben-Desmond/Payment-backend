@@ -35,12 +35,12 @@ exports.implementKCPayment = implementKCPayment;
 function verifyKCDonations(res) {
     return __awaiter(this, void 0, void 0, function* () {
         const donations = yield getAllDonations();
-        console.log(donations);
+        // console.log(donations)
         for (let i = 0; i < donations.length; i++) {
             const donation = donations[i];
             const result = (yield axios_1.default.get(`https://zitopay.africa/api_v1?action=get_transaction&receiver=obendesmond&ref=${donation.ref}`)).data;
             yield delay();
-            console.log(result.status, donation);
+            console.log(result.status, donation.ref, donation.contactEmail);
             if (result.status === 1) {
                 makeDonorPaid(donation);
             }
