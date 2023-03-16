@@ -17,12 +17,12 @@ const firebaseConfig = {
     storageBucket: "transcript-assistant-app.appspot.com",
     messagingSenderId: "449963740527",
     appId: "1:449963740527:web:6392525d22132fd91f6c9a",
-    measurementId: "G-SF4WNHC6DN"
+    measurementId: "G-SF4WNHC6DN",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig, "transcript-app");
-const db = getFirestore(app)
+const db = getFirestore(app);
 
 export async function verifyZitoPaymentSuccess(transcriptID: string) {
 
